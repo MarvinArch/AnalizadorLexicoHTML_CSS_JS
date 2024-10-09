@@ -43,7 +43,7 @@ public class AnalizadorHtml {
                     linea++;
                     columna = 1;
                 } else if (texto[i] == 60) {
-                    model.add(new TokenModel("HTML", "Apertura Etiqueta", "" + texto[i], linea, columna, "Apertura Etiqueta", "<"));
+                    model.add(new TokenModel("HTML", "Apertura Etiqueta", "" + texto[i], linea, columna, "<", "<"));
                     columna++;
                     estado = 1;// se envia a estado 1 para buscar el nombre de la etiqueta
                 } else if (texto[i] == 47 && texto[i + 1] == 47) {

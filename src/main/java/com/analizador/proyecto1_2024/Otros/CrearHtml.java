@@ -62,10 +62,10 @@ public class CrearHtml {
                 for (int j = 0; j < agregartabulaciones; j++) {
                     retorno+="\t";
                 }
-                retorno+=modeloTemporal.get(i).getLexema().trim()+" ";
+                retorno+=modeloTemporal.get(i).getGrupo().trim()+" ";
             }else{
                 if (!modeloTemporal.get(i).getTipo().equalsIgnoreCase("Estado") && !modeloTemporal.get(i).getTipo().equalsIgnoreCase("comentario")) {
-                    retorno+=modeloTemporal.get(i).getLexema().trim()+" ";
+                    retorno+=modeloTemporal.get(i).getGrupo().trim()+" ";
                 }
             }
         }
