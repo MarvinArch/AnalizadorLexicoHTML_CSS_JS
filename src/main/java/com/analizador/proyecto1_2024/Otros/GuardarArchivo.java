@@ -19,6 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class GuardarArchivo extends JFileChooser{
     String ubicacion = null;
     FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Archivos", "txt", "py");
+    FileNameExtensionFilter imgFilter2 = new FileNameExtensionFilter("Archivos", "txt", "html");
     
     public void guardarNuevoArchivo(Component parent, String contenido){
         this.setFileFilter(imgFilter);
@@ -85,5 +86,31 @@ public class GuardarArchivo extends JFileChooser{
         }
         
         return newTitle;
+    }
+    
+    public void guardarNuevoArchivoHtml(Component parent, String contenido){
+        this.setFileFilter(imgFilter2);
+        int eleccion=this.showSaveDialog(parent);
+        if (eleccion == 0) {
+            ubicacion = this.getSelectedFile().getAbsolutePath();
+            try {
+                if (ubicacion.contains(".html")) {
+                    ubicacion=ubicacion;
+                }else{
+                    ubicacion=ubicacion+".html";
+                }
+                File file = new File(ubicacion);
+                // Si el archivo no existe es creado
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                FileWriter fw = new FileWriter(file);
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write(contenido);
+                bw.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

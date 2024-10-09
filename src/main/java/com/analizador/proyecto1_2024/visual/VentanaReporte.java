@@ -38,9 +38,8 @@ public class VentanaReporte extends JFrame{
     public void tipoReporte(ArrayList<TokenModel> reporte, boolean optimizado,ArrayList<TokenModel> eliminados){
         int filas = reporte.size()+1;
         if (optimizado) {
-            filas+=eliminados.size()+1;
             panelMatriz.setLayout(new GridLayout(0, 6));
-            crearReporteOptimizado();
+            crearReporteOptimizado(reporte, eliminados);
         }else{
             panelMatriz.setLayout(new GridLayout(0, 6));
             reporteGeneral(reporte);
@@ -48,16 +47,113 @@ public class VentanaReporte extends JFrame{
         
     }
     
-    public void crearReporteOptimizado(){
-        for (int i = 0; i < 5; i++) {
-            
-            JLabel label = new JLabel("");
-            label.setPreferredSize(new Dimension(125, 50));
+    public void crearReporteOptimizado(ArrayList<TokenModel> reporteSinOptimizar, ArrayList<TokenModel> eliminados){
+        int filas = reporteSinOptimizar.size()+eliminados.size()+4; 
+        String[] tituloEncabezado={"Token", "Expresion", "Lenguaje", "Tipo", "Fila", "Columna"};
+        Font fuente = new Font("Courier", Font. BOLD,12);
+        for (int i = 0; i < 6; i++) {//crea el encabezado de eliminados
+            JLabel label;
+            if (i==3) {
+                label = new JLabel("Eliminados");
+            }else{
+                label = new JLabel("");
+            }
+            label.setPreferredSize(new Dimension(116, 30));
             label.setHorizontalAlignment(SwingConstants.CENTER); 
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK)); 
             panelMatriz.add(label);
-           // label.setFont(fuente);
+            label.setFont(fuente);
         }
+        for (int i = 0; i < 6; i++) {
+            JLabel label = new JLabel(tituloEncabezado[i]);
+            label.setPreferredSize(new Dimension(116, 30));
+            label.setHorizontalAlignment(SwingConstants.CENTER); 
+            label.setBorder(BorderFactory.createLineBorder(Color.BLACK)); 
+            panelMatriz.add(label);
+            label.setFont(fuente);
+        }
+        for (int i = 0; i < eliminados.size(); i++) {
+            for (int j = 0; j < 6; j++) {
+                JLabel label;
+                switch (j) {
+                    case 0:
+                        label = new JLabel(eliminados.get(i).getLexema());
+                        break;
+                    case 1:
+                        label = new JLabel(eliminados.get(i).getExpresionRegular());
+                        break;
+                    case 2:
+                        label = new JLabel(eliminados.get(i).getLenguaje());
+                        break;
+                    case 3:
+                        label = new JLabel(eliminados.get(i).getTipo());
+                        break;
+                    case 4:
+                        label = new JLabel(eliminados.get(i).getLinea()+"");
+                        break;
+                    case 5:
+                        label = new JLabel(eliminados.get(i).getColumna()+"");
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                label.setPreferredSize(new Dimension(116, 30));
+                label.setHorizontalAlignment(SwingConstants.CENTER); 
+                label.setBorder(BorderFactory.createLineBorder(Color.BLACK)); 
+                panelMatriz.add(label);
+            }
+        }
+        for (int i = 0; i < 6; i++) {//crea el encabezado de reporte
+            JLabel label;
+            if (i==3) {
+                label = new JLabel("Eliminados");
+            }else{
+                label = new JLabel("");
+            }
+            label.setPreferredSize(new Dimension(116, 30));
+            label.setHorizontalAlignment(SwingConstants.CENTER); 
+            label.setBorder(BorderFactory.createLineBorder(Color.BLACK)); 
+            panelMatriz.add(label);
+            label.setFont(fuente);
+        }
+        for (int i = 0; i < reporteSinOptimizar.size(); i++) {
+            for (int j = 0; j < 6; j++) {
+                JLabel label;
+                switch (j) {
+                    case 0:
+                        label = new JLabel(reporteSinOptimizar.get(i).getLexema());
+                        break;
+                    case 1:
+                        label = new JLabel(reporteSinOptimizar.get(i).getExpresionRegular());
+                        break;
+                    case 2:
+                        label = new JLabel(reporteSinOptimizar.get(i).getLenguaje());
+                        break;
+                    case 3:
+                        label = new JLabel(reporteSinOptimizar.get(i).getTipo());
+                        break;
+                    case 4:
+                        label = new JLabel(reporteSinOptimizar.get(i).getLinea()+"");
+                        break;
+                    case 5:
+                        label = new JLabel(reporteSinOptimizar.get(i).getColumna()+"");
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                label.setPreferredSize(new Dimension(116, 30));
+                label.setHorizontalAlignment(SwingConstants.CENTER); 
+                label.setBorder(BorderFactory.createLineBorder(Color.BLACK)); 
+                panelMatriz.add(label);
+            }
+            
+            
+        }
+        contenedorPrincipal.add(panelMatriz);
+        panelFondo = new JScrollPane(contenedorPrincipal);
+        panelFondo.setLocation(0, 100);
+        this.add(panelFondo);
+        
     }
     
     public void reporteGeneral(ArrayList<TokenModel> reporteSinOptimizar){
@@ -69,7 +165,6 @@ public class VentanaReporte extends JFrame{
         for (int i = 0; i < 6; i++) {
             JLabel label = new JLabel(tituloEncabezado[i]);
             label.setPreferredSize(new Dimension(116, 30));
-            label.setBackground(Color.red);
             label.setHorizontalAlignment(SwingConstants.CENTER); 
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK)); 
             panelMatriz.add(label);

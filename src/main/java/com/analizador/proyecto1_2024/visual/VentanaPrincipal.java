@@ -7,6 +7,7 @@ package com.analizador.proyecto1_2024.visual;
 import com.analizador.proyecto1_2024.Analizadores.AnalizadorGeneral;
 import com.analizador.proyecto1_2024.Modelos.TokenModel;
 import com.analizador.proyecto1_2024.Otros.CargarArchivos;
+import com.analizador.proyecto1_2024.Otros.CrearHtml;
 import com.analizador.proyecto1_2024.Otros.FuncionOptimizar;
 import com.analizador.proyecto1_2024.Otros.GuardarArchivo;
 import java.awt.Color;
@@ -34,6 +35,7 @@ public class VentanaPrincipal extends JFrame{
     private JMenu reporte;
     private JMenuItem reporteGeneral;
     private JMenuItem reporteOptimizado;
+    private JMenuItem crearHtml;
     private String ubicacion;
     private ArrayList<TokenModel> eliminados; // al optimizar se genera un arreglo que contiene componentes de la linea que haya sido eliminada en el caso de los comentarios
     private ArrayList<TokenModel> reporteFinal;//contiene el arreglo de tonkens que se reconocen en la escritura;
@@ -69,12 +71,17 @@ public class VentanaPrincipal extends JFrame{
         analizar= new JMenuItem("Analizar");
         reporte=new JMenu("Reportes");
         reporteGeneral = new JMenuItem("Reporte General");
+        reporteGeneral.setEnabled(false);
         reporteOptimizado= new JMenuItem("Reporte Optimizado");
+        reporteOptimizado.setEnabled(false);
+        crearHtml= new JMenuItem("Crear HTML");
+        crearHtml.setEnabled(false);
         barra.add(archivo);
         barra.add(analisis);
         barra.add(reporte);
         reporte.add(reporteGeneral);
         reporte.add(reporteOptimizado);
+        reporte.add(crearHtml);
         archivo.add(cargar);
         archivo.add(guardar);
         archivo.add(nuevoArchivo);
@@ -86,6 +93,8 @@ public class VentanaPrincipal extends JFrame{
         OptimizarCodigo();
         ReporteGeneral();
         AnalizarTexto();
+        ReporteOptimizado();
+        CrearHtmlFuncion();
     }
     
     private void MenuCargar(){
@@ -161,17 +170,18 @@ public class VentanaPrincipal extends JFrame{
             panelEscritura.getAreaEditable().setText(temp.respuesta(panelEscritura.getAreaEditable().getText()));
             eliminados.clear();
             eliminados=temp.getEliminados();
-            for (int i = 0; i < eliminados.size(); i++) {
-                System.out.println(eliminados.get(i).toString());
-            }
+            reporteOptimizado.setEnabled(true);
         });
     }
     
     private void ReporteGeneral(){
         reporteGeneral.addActionListener(l->{
-            VentanaReporte temp = new VentanaReporte();
-            temp.tipoReporte(reporteFinal, false, eliminados);
-            temp.setVisible(true);
+            if (reporteFinal.size()>1) {
+                VentanaReporte temp = new VentanaReporte();
+                temp.setTitle("Reporte General");
+                temp.tipoReporte(reporteFinal, false, eliminados);
+                temp.setVisible(true);
+            }
         });
     }
 
@@ -180,7 +190,28 @@ public class VentanaPrincipal extends JFrame{
             //enivar el texto de Jtenxarea para analizar crear los tokens
             AnalizadorGeneral temp = new AnalizadorGeneral();
             reporteFinal=temp.ClasificarTexto(panelEscritura.getAreaEditable().getText());
-            
+            reporteGeneral.setEnabled(true);
+            crearHtml.setEnabled(true);
+        });
+    }
+
+    private void ReporteOptimizado() {
+        reporteOptimizado.addActionListener(l->{
+            if (reporteFinal.size()>1 && eliminados.size()>1) {
+                VentanaReporte temp = new VentanaReporte();
+                temp.setTitle("Reporte Optimizado");
+                temp.tipoReporte(reporteFinal, true, eliminados);
+                temp.setVisible(true);
+            }
+        });
+    }
+
+    private void CrearHtmlFuncion() {
+        crearHtml.addActionListener(l->{
+            CrearHtml textoHtml= new CrearHtml();
+            String texto =textoHtml.CrearHtml(reporteFinal);
+            GuardarArchivo temp2 = new GuardarArchivo();
+            temp2.guardarNuevoArchivoHtml(this, texto);
         });
     }
 }
