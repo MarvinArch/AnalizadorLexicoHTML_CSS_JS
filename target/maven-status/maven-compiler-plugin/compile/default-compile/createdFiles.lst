@@ -6,6 +6,7 @@ com/analizador/proyecto1_2024/visual/PanelPrincipal.class
 com/analizador/proyecto1_2024/visual/VentanaPrincipal.class
 com/analizador/proyecto1_2024/visual/PanelErrores.class
 com/analizador/proyecto1_2024/Modelos/TokenModel.class
+com/analizador/proyecto1_2024/Analizadores/AnalizadorHtml.class
 com/analizador/proyecto1_2024/visual/NewJFrame.class
 com/analizador/proyecto1_2024/Otros/NumerarLineas.class
 com/analizador/proyecto1_2024/Otros/NumerarLineas$1.class

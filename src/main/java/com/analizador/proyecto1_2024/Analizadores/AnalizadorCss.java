@@ -72,6 +72,7 @@ public class AnalizadorCss {
                     lexema+=texto[i];
                     if (lexema.length()==2 && lexema.equals(">>")) {
                         posicionFinal=i-2;
+                        linea--;
                         return model;
                     }
                 }else if (texto[i]==42) {
@@ -233,7 +234,7 @@ public class AnalizadorCss {
                         estado=0;
                     }
                 }else{
-                    System.out.println("erro en la linea de comentario en Css");
+                    System.out.println("error en la linea de comentario en Css");
                 }
             }  else {
                 return model;

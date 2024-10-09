@@ -7,6 +7,7 @@
 /home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/Analizadores/AnalizadorCss.java
 /home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/visual/PanelPrincipal.java
 /home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/Modelos/TokenModel.java
+/home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/Analizadores/AnalizadorHtml.java
 /home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/Analizadores/AnalizadorJavaScript.java
 /home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/Analizadores/AnalizadorGeneral.java
 /home/David/Documents/LenguajesFormales/proyecto1_lenguajes_2024/Proyecto1_2024/src/main/java/com/analizador/proyecto1_2024/visual/PanelErrores.java

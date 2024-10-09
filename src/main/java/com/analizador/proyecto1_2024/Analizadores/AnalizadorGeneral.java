@@ -14,6 +14,9 @@ import java.util.ArrayList;
 public class AnalizadorGeneral {
     private int linea;
     private ArrayList<TokenModel> reporte; 
+    private AnalizadorHtml analizHtml;
+    private AnalizadorCss analizCss;
+    private AnalizadorJavaScript analizJs;
 
     public AnalizadorGeneral() {
         reporte = new ArrayList<>();
@@ -34,19 +37,22 @@ public class AnalizadorGeneral {
                     tipo += analisis[i];
                     if ((analisis[i] == 10 || analisis[i] == 32) && estado == 0) {
                         if (tipo.trim().equals(">>[html]")) {
-                            tipo="";
-                            i=EstadoHtml(analisis, i);
-                        } else if (tipo.trim().equals(">>[css]")) {
-                            System.out.println("empezo el analisis de css");
                             if (analisis[i]==10) linea++;
-                            reporte.add(new TokenModel("Css", "Estado", ">>[css]", linea, columna, "Estado", tipo.trim()));
+                            reporte.add(new TokenModel("Html", "Estado", ">>[html]", linea-1, columna, "Estado", tipo.trim()));
+                            i=EstadoHtml(analisis, i+1);
+                            estado=-1;
+                            i--;
+                            tipo="";
+                        } else if (tipo.trim().equals(">>[css]")) {
+                            if (analisis[i]==10) linea++;
+                            reporte.add(new TokenModel("Css", "Estado", ">>[css]", linea-1, columna, "Estado", tipo.trim()));
                             i=EstadoCss(analisis, i+1);
                             estado=-1;
                             i--;
                             tipo="";
                         } else if (tipo.trim().equals(">>[js]")) {
                             if (analisis[i]==10) linea++;
-                            reporte.add(new TokenModel("JavaScript", "Estado", ">>[js]", linea, columna, "Estado", tipo.trim()));
+                            reporte.add(new TokenModel("JavaScript", "Estado", ">>[js]", linea-1, columna, "Estado", tipo.trim()));
                             i=EstadoJavaScript(analisis, i+1);
                             estado=-1;
                             i--;
@@ -57,6 +63,19 @@ public class AnalizadorGeneral {
                     linea++;
                 } else if (estado==-1 && analisis[i]==32) {
                     columna++;
+                } else if (analisis[i]==47 && estado==-1) {
+                    if (analisis[i+1]==47) {
+                        tipo+=analisis[i];
+                        estado=2;
+                    }
+                } else if (estado==2) {
+                    tipo+=analisis[i];
+                    if (analisis[i]==10) {
+                        i--;
+                        reporte.add(new TokenModel("General", "Comentario", tipo, linea, columna, "Comentario", "//.*"));
+                        tipo="";
+                        estado=-1;
+                    }
                 }
 
             }
@@ -67,25 +86,32 @@ public class AnalizadorGeneral {
     }
     
     public int EstadoHtml(char[] analizar, int posicion){
-        System.out.println("reconocio Html");
+        analizHtml= new AnalizadorHtml();
+        ArrayList<TokenModel>resTemp=analizHtml.AnalizarHtml(linea, analizar, posicion);
+        AgregarALista(resTemp);
+        resTemp.clear();
+        linea=analizHtml.getLinea();
+        posicion=analizHtml.getPosicionFinal();
         return posicion;
     }
     public int EstadoCss(char[] analizar, int posicion){
-        AnalizadorCss temp = new AnalizadorCss();
-        ArrayList<TokenModel>resTemp=temp.AnalizarCss(linea, analizar, posicion);
+        analizCss = new AnalizadorCss();
+        ArrayList<TokenModel>resTemp=analizCss.AnalizarCss(linea, analizar, posicion);
         AgregarALista(resTemp);
-        linea=temp.getLinea();
-        posicion=temp.getPosicionFinal();
+        resTemp.clear();
+        linea=analizCss.getLinea();
+        posicion=analizCss.getPosicionFinal();
         return posicion;
     }
     public int EstadoJavaScript(char[] analizar, int posicion){
         /*se envia todo el texto a analizar si encuentra un cambio de estado js a html o css regresa  
            la linea en la que termino de analizar y la posicion */
-        AnalizadorJavaScript temp = new AnalizadorJavaScript();
-        ArrayList<TokenModel>resTemp=temp.AnalizarJavaScript(linea, analizar, posicion);
+        analizJs = new AnalizadorJavaScript();
+        ArrayList<TokenModel>resTemp=analizJs.AnalizarJavaScript(linea, analizar, posicion);
         AgregarALista(resTemp);
-        linea=temp.getLineaFinal();
-        posicion=temp.getPosicionFinal();
+        resTemp.clear();
+        linea=analizJs.getLineaFinal();
+        posicion=analizJs.getPosicionFinal();
         return posicion;
     }
     
